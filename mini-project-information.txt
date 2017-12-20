@@ -1,0 +1,29 @@
+1) Insert below the student numbers and names of the 1-3 group members, one per line
+662862 Aditya Kaushik Surikuchi
+662134 Héctor Laria Mantecón 
+662529 Maximilian Andreas Peter Proll
+
+2) Write below the name of your group
+Firing Neurons
+
+3) Write below a short description of the machine learning problem you plan to address
+Predict the helpfulness and / or rating of a product based on the product data (incl. review, summary...)
+
+4) Write below what deep learning approach(es) you plan to employ in your project
+NN applied to NLP ConNet recommendation models
+
+5) Write below what deep learning software you plan to use in your project
+Theano, TensorFlow, (Py)Torch
+
+6) Write below what computational resources you plan to utilize in your project
+our own laptop and resources in Paniikki / Maari and AWS
+
+7) Write below what kind of data you plan to use in your experiments
+Product review databases from Amazon: http://jmcauley.ucsd.edu/data/amazon/
+
+8) Write below what are the reference methods and results you plan to compare against
+we found several papers describing similar approaches and datasets which we use for comparing results and check reference methods
+some of the papers are:
+Predicting Amazon Product Review Helpfulness - James Wei, Jessica Ko, Jay Patel
+Hidden Factors and Hidden Topics: Understanding Rating Dimensions with Review Text - Julian McAuley, Jure Leskovec
+Sentiment Analysis on Movie Reviews using Recursive and Recurrent Neural Network Architectures - Aditya Timmaraju, Vikesh Khanna
