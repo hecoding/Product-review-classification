@@ -1,6 +1,7 @@
 *.pdf
 .DS_Store
 *.gz
+*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
