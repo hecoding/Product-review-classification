@@ -1,4 +1,3 @@
-from __future__ import division, print_function, absolute_import
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -234,9 +233,12 @@ class TfidfFeaturizer(object):
 
     def fit_transform(self, df):
         docs = self.__create_doc_list(df)
+        print("doc list created: " + str(len(docs)))
         self.vectorizer = TfidfVectorizer(
             ngram_range=(1,3),
-            max_features=self.max_features
+            max_features=self.max_features,
+            encoding='utf-8',
+            decode_error='replace'
         )
         return (self.vectorizer.fit_transform(docs)).toarray()
 
@@ -248,10 +250,10 @@ class TfidfFeaturizer(object):
             return None
 
     def __create_doc_list(self, df):
-        X = df[self.col_name].tolist()
+        X = df[self.col_name].values.astype('U').tolist()
         if self.should_stem:
             X_stem = [None] * len(X)
-            for i in xrange(len(X)):
+            for i in range(len(X)):
                 X_stem[i] = ' '.join([self.stemmer.stem(w) for w in X[i].split()])
             return X_stem
         else:
@@ -316,7 +318,7 @@ class TfidfClassifier(object):
 
     def __make_rand_range(self, start, end, n):
         rr = []
-        for _ in xrange(n):
+        for _ in range(n):
             rr.append(start + (abs(end - start) * random.random()))
         return sorted(rr)
 
@@ -348,7 +350,7 @@ class TfidfClassifier(object):
         reg_str = [0.01, 0.1, 1.0, 10, 25, 50, 100, 500, 1000]
         overall_best_c = None
         overall_best_val_acc = -1
-        for _ in xrange(4):
+        for _ in range(4):
             best_c, best_val_acc, start, end = find_best_c(reg_str)
             if best_val_acc > overall_best_val_acc:
                 overall_best_val_acc = best_val_acc
