@@ -5,6 +5,13 @@
 *.idea/
 *.csv
 
+#LaTeX
+
+*.aux
+*.blg
+*.out
+*.bbl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
