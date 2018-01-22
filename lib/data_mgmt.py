@@ -6,8 +6,6 @@ import nltk
 import numpy as np
 import pandas as pd
 import random
-import sklearn
-import string
 
 
 class Dataset(object):
@@ -75,9 +73,9 @@ class Dataset(object):
         if self.max_tfidf < 1:
             self.tfidf_classifier = None
         else:
-            self.tfidf_classifier = TfidfClassifier(self.tfidf_train, 
-                np.array(self.train[self.label]))
-        
+            self.tfidf_classifier = TfidfClassifier(self.tfidf_train,
+                                                    np.array(self.train[self.label]))
+
         self.__cond_print("Featurizing training set.")
         training_am = self.asin_map.copy()
         training_rm = self.reviewer_map.copy()
@@ -112,7 +110,7 @@ class Dataset(object):
         return self.training_data.get_n_cols()
 
     def __split_train_test(self):
-        train, test = train_test_split(self.df, test_size=self.test_size, 
+        train, test = train_test_split(self.df, test_size=self.test_size,
                                        random_state=42)
         train.reset_index(drop=True, inplace=True)
         test.reset_index(drop=True, inplace=True)
@@ -171,23 +169,23 @@ class ReviewSequenceData(object):
                 return np.array([1., 0.])
 
     def __encode_lstm_features(self, row):
-            words = row[self.index['review_text']].split()
-            embedded_review = np.zeros([self.max_size, self.n_features], 
-                                       dtype='float32')
-            j = 0
-            skip_count = 0
-            for word in words:
-                if word in self.we_model:
-                    embedded_review[j, :] = self.we_model[word]
-                    j += 1
-                elif word.capitalize() in self.we_model:
-                    embedded_review[j, :] = self.we_model[word.capitalize()]
-                    j += 1
-                else:
-                    skip_count += 1
-                if j == self.max_size:
-                    break
-            return embedded_review, self.__label_one_hot(row), j, skip_count
+        words = row[self.index['review_text']].split()
+        embedded_review = np.zeros([self.max_size, self.n_features],
+                                   dtype='float32')
+        j = 0
+        skip_count = 0
+        for word in words:
+            if word in self.we_model:
+                embedded_review[j, :] = self.we_model[word]
+                j += 1
+            elif word.capitalize() in self.we_model:
+                embedded_review[j, :] = self.we_model[word.capitalize()]
+                j += 1
+            else:
+                skip_count += 1
+            if j == self.max_size:
+                break
+        return embedded_review, self.__label_one_hot(row), j, skip_count
 
     def __encode_dnn_features(self, i, row, encode_ratio):
         category_onehot = [0.0] * 24
@@ -235,7 +233,7 @@ class TfidfFeaturizer(object):
         docs = self.__create_doc_list(df)
         print("doc list created: " + str(len(docs)))
         self.vectorizer = TfidfVectorizer(
-            ngram_range=(1,3),
+            ngram_range=(1, 3),
             max_features=self.max_features,
             encoding='utf-8',
             decode_error='replace'
@@ -284,8 +282,8 @@ class TextFeaturizer(object):
         features.append(np.sum(word_lens))
 
         # POS distribution
-        tagged_pos = [t[1] for t in nltk.pos_tag(words, tagset='universal')] # SLOW
-        pd = { pos : 0.0 for pos in TextFeaturizer.universal_pos }
+        tagged_pos = [t[1] for t in nltk.pos_tag(words, tagset='universal')]  # SLOW
+        pd = {pos: 0.0 for pos in TextFeaturizer.universal_pos}
         n_tagged = 0.0
         for pos in tagged_pos:
             if pos in pd:
@@ -294,7 +292,7 @@ class TextFeaturizer(object):
         for pos in TextFeaturizer.universal_pos:
             features.append(pd[pos] / n_tagged)
         return np.array(features)
-    
+
     @staticmethod
     def feature_length():
         return len(TextFeaturizer.featurize('sample sentence'))
@@ -303,8 +301,8 @@ class TextFeaturizer(object):
 class TfidfClassifier(object):
     def __init__(self, tfidf_matrix, labels):
         self.X_train, self.X_val, self.y_train, self.y_val = \
-            train_test_split(tfidf_matrix, labels, 
-                test_size=0.25, random_state=42)
+            train_test_split(tfidf_matrix, labels,
+                             test_size=0.25, random_state=42)
         self.c = self.__find_optimal_c()
         self.lr = LogisticRegression(penalty='l2', C=self.c, n_jobs=-1)
         self.lr.fit(tfidf_matrix, labels)
@@ -345,7 +343,7 @@ class TfidfClassifier(object):
             else:
                 start = candidates[best_c_idx - 1]
                 end = candidates[best_c_idx + 1]
-            return best_c, best_val_acc, start, end 
+            return best_c, best_val_acc, start, end
 
         reg_str = [0.01, 0.1, 1.0, 10, 25, 50, 100, 500, 1000]
         overall_best_c = None
