@@ -131,6 +131,7 @@ class ReviewSequenceData(object):
         self.label = params.get('label', 'good')
         self.tfidf_matrix = params.get('tfidf_matrix', None)
         self.tfidf_classifier = params.get('tfidf_classifier', None)
+        self.real_labels = df[['good', 'bad']].values
 
         self.index = col_index
         self.we_model = we_model
