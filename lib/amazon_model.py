@@ -98,6 +98,6 @@ class AmazonModel(object):
                     tf.maximum(preactivation, tf.scalar_mul(self.alpha, preactivation)),
                     fc_keep_prob
                 )
-            return tf.matmul(fc_data, weights[-1]) + biases[-1]
+            return tf.matmul(fc_data, weights[-1]) + biases[-1], weights
 
         return pred
