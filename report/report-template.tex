@@ -43,7 +43,7 @@ pdfborder = {0 0 0}
 	stringstyle=\color{deepgreen},
 	commentstyle=\itshape\color{deepgreen}
 }
-
+\usepackage{enumerate}
 
 \begin{document}
 
@@ -103,34 +103,66 @@ involved in the method.}
 \points{3}
 
 \section{Data}
+\subsection{Description}
 
 The data used for this mini project is the Amazon product review data by Julian McAuley from UC San Diego \cite{HeMcA16a} \cite{McATarShiHen15}. His data contains Amazon product reviews and metadata, including 142.8 million reviews spanning May 1996 - July 2014.
 A product review in the dataset is build up by the following fields: \textit{reviewer ID}, \textit{asin} (product ID), \textit{helpful} (tuple of two integers $f_p$ and $f$), \textit{review Text}, \textit{overall} (rating out of five), \textit{summary} and \textit{category} (like books, electronics or digital music).
+An exemplary review is displayed in Table~\ref{tab:JSON}. 
 
-An example can be seen in Table~\ref{tab:JSON}. 
-\begin{table}[h]
+\begin{table}[h!]
 \begin{center}
  \begin{tabular}{l |c}
  JSON category & example review value \\ \hline
  reviewer ID & A2B73CL3QSYWLB \\ 
  asin & B000IBUP6A \\ 
  helpful & [3, 6] \\ 
-review Text & This film was a minor letdown after reading all the five star reviews. ... \\ 
+review Text & This film was a minor letdown after reading all the five star reviews ... \\ 
  overall & 4.0 \\ 
  summary & Very Good Crime Film \\ 
  category & Amazon Instant Video
  \end{tabular}
- \caption{ Content of a sample review from the Amazon product review dataset}
+ \caption{ Exemplary content of a sample review from the Amazon product review dataset}
  \label{tab:JSON}
 \end{center}
 \end{table}
 
-\defaulttext{Tell where the data is from, what it contains, the number of samples
-in training, validation and test sets, the dimensional, etc.  Also
-describe the preprocessing stages applied by the providers of the data
-or by you yourselves.}
+A reduced 5-core version of the dataset can be downloaded from the \href{http://jmcauley.ucsd.edu/data/amazon/links.html}{website of Julian McAuley}. In the 5-core dataset each product review and user has at least five entries, which contains in total 18.2 million reviews. Additionally we filtered our reviews which had less than five helpfulness feedback votes, which reduces the remaining dataset to 3.0 million reviews.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.7\linewidth]{pics/data_distribution.png}
+\caption{Distribution of helpfulness scores: \\ (left) for the filtered 5-core dataset, (right) after unskewing}
+\label{pic:distri}
+\end{center}
+\end{figure}
+
+After leaving out review with less then five helpfulness feedback votes we saw, that the distribution of helpfulness scores is not equally distributed but rather skewed, as nearly half of the 3.0 million reviews have a helpfulness score of greater than 0.8. This is displayed in Figure~\ref{pic:distri}. 
+
+In order to evenly distribute the dataset the entire range of the helpfulness score, we unskewed the data by randomly selecting the same number of reviews within a 0.2 helpfulness-score-bucket. The process of unskewing left 1.1 million reviews roughly uniformily distributed in the final dataset.
+
+After we tried to further analyse the full dataset we ran into memory issues as both machines in \textit{Paniikki} as well as serves such as \textit{force} couldn't cope with the vast number of reviews, which is why we decided to reduce the data by randomly sampling a subset of 50,000. 80\% of this dataset will be used for both training and validation and the remaining 20\% are used for the final test.
+
+\subsection{Preprocessing}
+
+In order to standardize the raw text of all reviews we transformed the raw text into normalized 1-grams. The raw text is the concatenation of the \textit{summary} field and the \textit{reviewText} field. 
+Additionally we preprocessed the data with the following operations:
+
+\begin{enumerate}[(i)]
+\item Remove all capitalization
+\item Tokenize the text and remove whitespace, symbols, punctuation, numerals
+\item for all tokens, we filtered out:
+\begin{itemize}
+\item English stopwords (according to the NLTK stopwords corpus)
+\item tokens with less than three characters
+\end{itemize}
+\end{enumerate}
+
+%\defaulttext{Tell where the data is from, what it contains, the number of samples
+%in training, validation and test sets, the dimensional, etc.  Also
+%describe the preprocessing stages applied by the providers of the data
+%or by you yourselves.}
 %%
-\points{3}
+%\points{3}
 
 \section{Experiments}
 
