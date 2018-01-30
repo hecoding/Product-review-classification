@@ -87,17 +87,19 @@ project, your applied method and used data in general terms.}
 
 \section{Related work}
 
-\defaulttext{Give a brief literature survey on the prior works and state of the art
-in the problem setting and the methods people have earlier applied for
-solving it.}
+There are many proposed solutions for text classification problems. They involve both neural and non-neural techniques. Some of the prior work on Amazon movie reviews has shown that ensemble learning using derived features (like review length, product rating) which performed better in comparison to plain classification methods like SVMs or logistic regression.
+Other work used contextual metadata features (like product category, reviewer details) which seemed to work when using non-neural models.
+
+Around 2011, deep networks starting becoming popular after the conception of convolutional neural nets\cite{DBLP:journals/corr/Kim14f} for sentence classification. They started to consistently perform better compared to the conventional classification methods listed above. Gradually when RNNs (recurrent neural nets) came into picture researchers started to take advantage of the architecture. Specifically, the introduction of LSTMs started to revolutionize the challenging domains of speech recognition, machine translation and image captioning.
+
+Owing to such growing popularity of LSTMs there were many deep network architectures researched, built and published leveraging multiple-layers of LSTMs for the natural language processing domain. One such notable work is for predicting product review helpfulness using a deep net arch with 2 LSTM layers along with sophisticated NLP features\cite{wei}. 
 %%
-\points{2}
 
 \section{Method}
 
 \defaulttext{Describe your chosen solution in sufficient detail.  Pay special
 attention to describing the deep learning algorithm(s) you used.  Show
-some essential equations and describe all hyperparameters that are
+some essential equations and describe all hyper-parameters that are
 involved in the method.}
 %%
 \points{3}
@@ -145,7 +147,7 @@ while running the experiments.}
 \section{References}
 
 \bibliography{bibliography}{}
-\bibliographystyle{alpha}
+\bibliographystyle{acm}
 
 \defaulttext{Most likely between 5--10 references to related works and results.}
 %%
