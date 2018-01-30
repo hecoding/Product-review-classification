@@ -104,7 +104,27 @@ involved in the method.}
 
 \section{Data}
 
-For the \cite{HeMcA16a} and \cite{McATarShiHen15}
+The data used for this mini project is the Amazon product review data by Julian McAuley from UC San Diego \cite{HeMcA16a} \cite{McATarShiHen15}. His data contains Amazon product reviews and metadata, including 142.8 million reviews spanning May 1996 - July 2014.
+A product review in the dataset is build up by the following fields: \textit{reviewer ID}, \textit{asin} (product ID), \textit{helpful} (tuple of two integers $f_p$ and $f$), \textit{review Text}, \textit{overall} (rating out of five), \textit{summary} and \textit{category} (like books, electronics or digital music).
+
+An example can be seen in Table~\ref{tab:JSON}. 
+\begin{table}[h]
+\begin{center}
+ \begin{tabular}{l |c}
+ JSON category & example review value \\ \hline
+ reviewer ID & A2B73CL3QSYWLB \\ 
+ asin & B000IBUP6A \\ 
+ helpful & [3, 6] \\ 
+review Text & This film was a minor letdown after reading all the five star reviews. ... \\ 
+ overall & 4.0 \\ 
+ summary & Very Good Crime Film \\ 
+ category & Amazon Instant Video
+ \end{tabular}
+ \caption{ Content of a sample review from the Amazon product review dataset}
+ \label{tab:JSON}
+\end{center}
+\end{table}
+
 \defaulttext{Tell where the data is from, what it contains, the number of samples
 in training, validation and test sets, the dimensional, etc.  Also
 describe the preprocessing stages applied by the providers of the data
