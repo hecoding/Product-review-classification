@@ -63,7 +63,8 @@ class AmazonModel(object):
             # outputs, states = tf.nn.dynamic_rnn(lstm_module, x, dtype=tf.float32)
 
             # create 2 LSTMCells
-            rnn_layers = [tf.nn.rnn_cell.LSTMCell(size) for size in [config.lstm_size, config.lstm_size]]
+            # rnn_layers = [tf.nn.rnn_cell.LSTMCell(size) for size in [config.lstm_size, config.lstm_size]]
+            rnn_layers = [tf.contrib.rnn.GRUCell(size) for size in [config.lstm_size, config.lstm_size]]
 
             # create a RNN cell composed sequentially of a number of RNNCells
             multi_rnn_cell = tf.nn.rnn_cell.MultiRNNCell(rnn_layers)
