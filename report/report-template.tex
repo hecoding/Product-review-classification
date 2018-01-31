@@ -110,7 +110,7 @@ A product review in the dataset is build up by the following fields: \textit{rev
 An exemplary review is displayed in Table~\ref{tab:JSON}. 
 
 \begin{table}[h!]
-\begin{center}
+\centering
  \begin{tabular}{l |c}
  JSON category & example review value \\ \hline
  reviewer ID & A2B73CL3QSYWLB \\ 
@@ -121,26 +121,26 @@ review Text & This film was a minor letdown after reading all the five star revi
  summary & Very Good Crime Film \\ 
  category & Amazon Instant Video
  \end{tabular}
+ \captionsetup{justification=centering,margin=2cm}
  \caption{ Exemplary content of a sample review from the Amazon product review dataset}
  \label{tab:JSON}
-\end{center}
 \end{table}
 
 A reduced 5-core version of the dataset can be downloaded from the \href{http://jmcauley.ucsd.edu/data/amazon/links.html}{website of Julian McAuley}. In the 5-core dataset each product review and user has at least five entries, which contains in total 18.2 million reviews. Additionally we filtered our reviews which had less than five helpfulness feedback votes, which reduces the remaining dataset to 3.0 million reviews.
 
 \begin{figure}[h!]
-\begin{center}
+\centering
 \includegraphics[width=0.7\linewidth]{pics/data_distribution.png}
+\captionsetup{justification=centering,margin=2cm}
 \caption{Distribution of helpfulness scores: \\ (left) for the filtered 5-core dataset, (right) after unskewing}
 \label{pic:distri}
-\end{center}
 \end{figure}
 
-After leaving out review with less then five helpfulness feedback votes we saw, that the distribution of helpfulness scores is not equally distributed but rather skewed, as nearly half of the 3.0 million reviews have a helpfulness score of greater than 0.8. This is displayed in Figure~\ref{pic:distri}. 
+After leaving out reviews with less than five helpfulness feedback votes we saw, that the distribution of helpfulness scores is not equally distributed but rather skewed, as nearly half of the 3.0 million reviews have a helpfulness score of greater than 0.8. This is displayed in Figure~\ref{pic:distri}. 
 
 In order to evenly distribute the dataset the entire range of the helpfulness score, we unskewed the data by randomly selecting the same number of reviews within a 0.2 helpfulness-score-bucket. The process of unskewing left 1.1 million reviews roughly uniformily distributed in the final dataset.
 
-After we tried to further analyse the full dataset we ran into memory issues as both machines in \textit{Paniikki} as well as serves such as \textit{force} couldn't cope with the vast number of reviews, which is why we decided to reduce the data by randomly sampling a subset of 50,000. 80\% of this dataset will be used for both training and validation and the remaining 20\% are used for the final test.
+After we tried to further analyze the full dataset we ran into memory issues as both machines in \textit{Paniikki} as well as servers such as \textit{force} couldn't cope with the vast number of reviews, which is why we decided to reduce the data by randomly sampling a subset of 50,000. 80\% of this dataset are used for both training and validation and the remaining 20\% are used for the final test.
 
 \subsection{Preprocessing}
 
@@ -148,8 +148,8 @@ In order to standardize the raw text of all reviews we transformed the raw text 
 Additionally we preprocessed the data with the following operations:
 
 \begin{enumerate}[(i)]
-\item Remove all capitalization
-\item Tokenize the text and remove whitespace, symbols, punctuation, numerals
+\item remove all capitalization
+\item tokenize the text and remove whitespace, symbols, punctuation, numerals
 \item for all tokens, we filtered out:
 \begin{itemize}
 \item English stopwords (according to the NLTK stopwords corpus)
