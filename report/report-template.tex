@@ -330,12 +330,49 @@ As discussed in Subsection \ref{sec:main_model_framework} and \ref{subsec:featur
 From our final model ("GRUs (with both context features)" in the table) to the same model without the reviewer and the product identifiers, a drop of around $15\%$ in performance can be seen. It also reduced is training time, but the change is negligible.
 
 \section{Discussion}
+\subsection{Comparisons}
+\begin{table}[bh!]
+	\begin{tabular}{p{5cm}|p{3cm}|p{3cm}|p{3cm}}
+		\textbf{Model} & \textbf{Test-Accuracy} (good classifier) & \textbf{Test-Accuracy} (bad-classifier) & \textbf{Test-Accuracy} (generic classifier) \\ \hline
+		Collaborative Filtering                    & NA                              & NA                             & 0.79               \\ \hline
+		Using GRUs                                 & 0.775                           & 0.751                          & ~                  \\ \hline 
+		Amazon Comprehend (sentiment analysis API) & 0.09                            & 0.01                           & 0.89 (mixed)       \\
+	\end{tabular}
+	 \caption{Comparison of our results with existing ones}
+	 \label{tab:comp}
 
-\defaulttext{Discuss your results in comparison with comparable results your have
-found in the literature and web.  Explain any other findings you made
-while running the experiments.}
-%%
-\points{4}
+\end{table}
+
+From the comparisons displayed in Table~\ref{tab:comp} it is evident on why there is tremendous research on sentiment analysis. The leading publication we have found on web (that specifically deals with product reviews sentiment analysis), claims to achieve $\sim79$\% accuracy till date. We can also observe that Amazon is working on natural language processing and its efforts are still novice in the domain.
+	
+\subsection{Training Insights}
+After the training had finished we wanted to get a deeper understanding of the importance of features which are fed into the three stacked fully connected layers. Therefore we read out the weight matrix which is used to bundle the 95 features together to the desired binary output. We computed the mean of the absolute weights for all 95 features in order to quantify the information flow from the input layer to the first fully connected layer.
+
+Figure~\ref{pic:weights:tot} shows the mean of the absolute weights for all 95 features in the same order as they are displayed in Figure~\ref{pic:arch}. Hence the last 50 features reflect the average weight put on the GRU output. This figure demonstrates already one intuition, the GRU is the crucial part of this model and thus receives most of the weight.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\linewidth]{../weights/plot_weights.png}
+\captionsetup{justification=centering}
+\caption{Individual feature weight for good and bad dataset after the training}
+\label{pic:weights:tot}
+\end{figure}
+
+This characteristic becomes even more clear, when we group the weights together according to the superior category (such as product ID, product category, overall rating etc.) and normalize them by the number of features in the respective categories. The result of this grouping is shown in Figure~\ref{pic:weights:imp}. There we can see that the average weight which is associated to features belonging to the GRU is on average five times higher than the average weight associated to any other feature for both the good and the bad model. This underlines the significance of the GRU even more as it quantifies it to other feature categories of the model.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\linewidth]{../weights/plot_importance.png}
+\captionsetup{justification=centering}
+\caption{Feature importance for good and bad dataset after the training}
+\label{pic:weights:imp}
+\end{figure}
+
+%\defaulttext{Discuss your results in comparison with comparable results your have
+%found in the literature and web.  Explain any other findings you made
+%while running the experiments.}
+%%%
+%\points{4}
 
 \section{Conclusions}
 
