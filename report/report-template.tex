@@ -27,6 +27,7 @@ pdfborder = {0 0 0}
 \usepackage{listings} 				% noice code inclusion
 \usepackage{color}
 
+
 \definecolor{deepblue}{rgb}{0,0,0.5}
 \definecolor{deepred}{rgb}{0.6,0,0}
 \definecolor{deepgreen}{rgb}{0,0.5,0}
@@ -58,6 +59,7 @@ pdfborder = {0 0 0}
 \newcommand{\points}[1]{\par\noindent\textit{(#1 points)}}
 \newcommand{\onepoint}{\par\noindent\textit{(1 point)}}
 \newcommand{\defaulttext}[1]{\textit{\textcolor{red}{#1}}}
+\renewcommand{\refname}{}
 
 \begin{abstract}
   \defaulttext{Write an abstract of approximately 200 words. \\
@@ -97,17 +99,34 @@ Owing to such growing popularity of LSTMs there were many deep network architect
 
 \section{Method}
 
-\defaulttext{Describe your chosen solution in sufficient detail.  Pay special
-attention to describing the deep learning algorithm(s) you used.  Show
-some essential equations and describe all hyper-parameters that are
-involved in the method.}
+Considering the fact that there already are state of the art solutions to this problem of product review helpfulness, that are adopted by the e-commerce world, we approached this problem from an empirical perspective:
+\begin{enumerate}
+	\item[Step-A:] Choosing an existing model and validating it with updated load of amazon-reviews.
+	\item[Step-B:] Replacing modules of the design by using recent ideas in deep learning.
+	\item[Step-C:] Analyzing and experimenting by toggling various features.
+\end{enumerate}
+
+\underline{\textbf{Step-A}:} As mentioned in previous section, we used Predicting Amazon Product Review Helpfulness \cite{wei}, as our baseline model. This architecture takes advantage of LSTMs which efficiently understand temporal relationships in time sequence data. Specifically, LSTMs serve the purpose of distinguishing word strings in a given product review well.
+
+We started by validating the baseline architecture by using updated amazon product reviews from 24 categories\cite{McATarShiHen15} further described in the Data section. Experimentation process and obtained results are explained in later sections.
+
+\underline{\textbf{Step-B}:} The architecture used is outlined in the Figure below.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth,height=9cm]{pics/arch_good}
+	\captionsetup{justification=centering,margin=2cm}
+	\caption{Modified Network Architecture}
+	\label{pic:distri}
+\end{figure}
+
+\underline{\textbf{Step-C}:}
 %%
-\points{3}
+%\points{3}
 
 \section{Data}
 \subsection{Description}
 
-The data used for this mini project is the Amazon product review data by Julian McAuley from UC San Diego \cite{HeMcA16a} \cite{McATarShiHen15}. His data contains Amazon product reviews and metadata, including 142.8 million reviews spanning May 1996 - July 2014.
+The data used for this mini project is the Amazon product review data by Julian McAuley from UC San Diego \cite{McATarShiHen15}. His data contains Amazon product reviews and metadata, including 142.8 million reviews spanning May 1996 - July 2014.
 A product review in the dataset is build up by the following fields: \textit{reviewer ID}, \textit{asin} (product ID), \textit{helpful} (tuple of two integers $f_p$ and $f$), \textit{review Text}, \textit{overall} (rating out of five), \textit{summary} and \textit{category} (like books, electronics or digital music).
 An exemplary review is displayed in Table~\ref{tab:JSON}. 
 
@@ -140,7 +159,7 @@ A reduced 5-core version of the dataset can be downloaded from the \href{http://
 
 After leaving out reviews with less than five helpfulness feedback votes we saw, that the distribution of helpfulness scores is not equally distributed but rather skewed, as nearly half of the 3.0 million reviews have a helpfulness score of greater than 0.8. This is displayed in Figure~\ref{pic:distri}. 
 
-In order to evenly distribute the dataset the entire range of the helpfulness score, we unskewed the data by randomly selecting the same number of reviews within a 0.2 helpfulness-score-bucket. The process of unskewing left 1.1 million reviews roughly uniformily distributed in the final dataset.
+In order to evenly distribute the dataset the entire range of the helpfulness score, we unskewed the data by randomly selecting the same number of reviews within a 0.2 helpfulness-score-bucket. The process of unskewing left 1.1 million reviews roughly uniformly distributed in the final dataset.
 
 After we tried to further analyze the full dataset we ran into memory issues as both machines in \textit{Paniikki} as well as servers such as \textit{force} couldn't cope with the vast number of reviews, which is why we decided to reduce the data by randomly sampling a subset of 50,000. 80\% of this dataset are used for both training and validation and the remaining 20\% are used for the final test.
 
@@ -197,13 +216,10 @@ while running the experiments.}
 \points{3}
 
 \section{References}
-
 \bibliography{bibliography}{}
 \bibliographystyle{acm}
-
-\defaulttext{Most likely between 5--10 references to related works and results.}
 %%
-\points{2}
+%\points{2}
 
 \section{Roles of the authors}
 
