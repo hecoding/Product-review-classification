@@ -100,7 +100,8 @@ Research shows, that sales are directly influenced by the presence and the conte
 
 In order to tackle the above mentioned challenge we have implemented and trained a recurrent neural network in order for it to learn those aspects of a review that consumers value and thus rate as helpful and then apply the trained model on unseen test data and evaluate the accuracy of the predicted.
 
-The data used for this mini project is the Amazon product review data by Julian McAuley from UC San Diego \cite{HeMcA16a} \cite{McATarShiHen15}. This dataset includes 142.8 million reviews spanning over 18 years ranging from 1996 up until  2014. A more detailed description of the data can be read in the \nameref{sec:data} section. 
+The data used for this mini project is the Amazon product review data by Julian McAuley from UC San Diego
+\cite{HeM16} \cite{McATarShiHen15}. This dataset includes 142.8 million reviews spanning over 18 years ranging from 1996 up until  2014. A more detailed description of the data can be read in the \nameref{sec:data} section. 
 
 For this purpose we define the following:
 
@@ -210,7 +211,7 @@ review Text & This film was a minor letdown after reading all the five star revi
  summary & Very Good Crime Film \\ 
  category & Amazon Instant Video
  \end{tabular}
- \captionsetup{justification=centering,margin=2cm}
+ \captionsetup{justification=centering}
  \caption{ Exemplary content of a sample review from the Amazon product review dataset}
  \label{tab:JSON}
 \end{table}
@@ -324,7 +325,7 @@ The quantitative results of our mini project are summarized in Table~\ref{table:
 		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without\\ product id)\end{tabular}}         & 0.663               & 0.637              & 1h 14m          & 1h 24m          \\ \hline
 		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without both\\ context features)\end{tabular}}   & 0.616               & 0.594              & 1h 16m          & 1h 20m         
 	\end{tabular}
-	\caption{Final results: test set performance and training time}
+	\caption{Final results: performance on the test set and training time}
 	\label{table:finalresults}
 \end{table}
 
@@ -416,23 +417,23 @@ Overall the results show, that a binary classification for good reviews is more 
 
 This mini project was designed to \textit{allow the students to use the theoretical knowledge gained during the course in real life practical machine learning challenges}. In order to fully accomplish this main goal we tried to always work as a team and participate in all tasks equally.
 
-Regardless of this overall working principle we summarize the main tasks each member was involved in in Table~\ref{tab:roles}. This list contains only the most important responsibilities and must not be mistaken with an overarching list of tasks and responsibilities.
+Regardless of this overall working principle we summarize the main tasks each member was involved in in Table~\ref{tab:roles}. This list contains only the most important responsibilities.
 
 \begin{table}[bh!]
 \centering
  \begin{tabular}{l |l}
  member 		& task \\ \hline
- Aditya		&  dataset analysis, architecture of DL model, data gathering, visualization, \\ 
+ Aditya		& dataset analysis, architecture of DL model, data gathering, visualization, \\ 
  			& word embedding , measure accuracy, anatomical feature, reporting,  \\
 			& scheduling tasks, debugging, remote server access\\ \hline
- HŽctor 		&  remote server access, data gathering, measure accuracy, dataset analysis,\\
- 			& anatomical feature, reporting, word embedding, scheduling tasks, debugging, \\
-			& architecture of DL model, visualization\\ \hline
- Maximilian 	& word embedding ,reporting, anatomical feature, remote server access,\\
- 			& measure accuracy, data gathering, dataset analysis, visualization, \\
-			& architecture of DL model, scheduling tasks, debugging
+HŽctor		& dataset analysis, architecture of DL model, data gathering, visualization, \\ 
+ 			& word embedding , measure accuracy, anatomical feature, reporting,  \\
+			& scheduling tasks, debugging, remote server access\\ \hline
+Maximilian	& dataset analysis, architecture of DL model, data gathering, visualization, \\ 
+ 			& word embedding , measure accuracy, anatomical feature, reporting,  \\
+			& scheduling tasks, debugging, remote server access
  \end{tabular}
- \captionsetup{justification=centering,margin=2cm}
+ \captionsetup{justification=centering}
  \caption{Involvement of main tasks and responsibilities broken down to the team members}
  \label{tab:roles}
 \end{table}
