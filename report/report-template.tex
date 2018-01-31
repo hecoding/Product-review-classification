@@ -4,8 +4,8 @@
 
 \usepackage[latin1,applemac]{inputenc}	%% deutsche Umlaute wie normale
  								%% Buchstaben verwenden 
- 								%% (ansonsten muesste √§ durch a getippt werden)
-\usepackage{a4wide} 				%% kleinere Seitenr≈†nder
+ 								%% (ansonsten muesste Ã? durch a getippt werden)
+\usepackage{a4wide} 				%% kleinere SeitenrÅ nder
 
 \usepackage{amssymb,amsthm,amsfonts, amsmath}
 								%% diverse Matheerweiterungen, z.B. \implies
@@ -51,18 +51,18 @@
 
 \begin{document}
 
+\renewcommand{\refname}{}
+
 \title{Title of the Mini Project\\
 \normalsize (MP 004 Firing Neurons)}
 
-\author{H≈Ωctor Laria Mantec‚Äîn (662134) \and Maximilian Proll (662529)
+\author{Héctor Laria Mantecón (662134) \and Maximilian Proll (662529)
   \and Aditya Kaushik Surikuchi (662862)}
 
 \maketitle
-
 \newcommand{\points}[1]{\par\noindent\textit{(#1 points)}}
 \newcommand{\onepoint}{\par\noindent\textit{(1 point)}}
 \newcommand{\defaulttext}[1]{\textit{\textcolor{red}{#1}}}
-\renewcommand{\refname}{}
 
 \begin{abstract}
   \defaulttext{Write an abstract of approximately 200 words. \\
@@ -133,7 +133,7 @@ Figure~\ref{pic:tsne} encourages us to differentiate the analysis and training f
 There are many proposed solutions for text classification problems. They involve both neural and non-neural techniques. Some of the prior work on Amazon movie reviews has shown that ensemble learning using derived features (like review length, product rating) which performed better in comparison to plain classification methods like SVMs or logistic regression.
 Other work used contextual metadata features (like product category, reviewer details) which seemed to work when using non-neural models.
 
-Around 2011, deep networks starting becoming popular after the conception of convolutional neural nets\cite{DBLP:journals/corr/Kim14f} for sentence classification. They started to consistently perform better compared to the conventional classification methods listed above. Gradually when RNNs (recurrent neural nets) came into picture researchers started to take advantage of the architecture. Specifically, the introduction of LSTMs started to revolutionize the challenging domains of speech recognition, machine translation and image captioning.
+Around 2011, deep networks starting becoming popular after the conception of convolutional neural nets\cite{DBLP:journals/corr/Kim14f} for sentence classification. They started to consistently perform better compared to the conventional classification methods listed above. Gradually when RNNs (recurrent neural nets) came into picture researchers started to take advantage of the architecture. Specifically, the introduction of LSTMs (Long Short-Term Memory Units) started to revolutionize the challenging domains of speech recognition, machine translation and image captioning.
 
 Owing to such growing popularity of LSTMs there were many deep network architectures researched, built and published leveraging multiple-layers of LSTMs for the natural language processing domain. One such notable work is for predicting product review helpfulness using a deep net arch with 2 LSTM layers along with sophisticated NLP features\cite{wei}. 
 %%
@@ -154,13 +154,33 @@ We started by validating the baseline architecture by using updated amazon produ
 \underline{\textbf{Step-B}:} The architecture used is outlined in the Figure below.
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=\linewidth,height=9cm]{pics/arch_good}
+	\includegraphics[width=1.05\linewidth,height=9cm]{pics/arch_good}
 	\captionsetup{justification=centering,margin=2cm}
 	\caption{Modified Network Architecture}
 	\label{pic:distri}
 \end{figure}
 
-\underline{\textbf{Step-C}:}
+As we know RNNs are designed for handling variable length sequential input by way of shared, recurrent hidden states. They weren't efficient because of the vanishing and exploding gradient issue and the obvious memory constraints until the conception of LSTMs and GRUs (Gated Recurrent Units) at a later point of time. These improved models still solve the same goals of mitigating and tracking long-term dependencies, but effectively. 
+
+The LSTMs achieve this via the input (regulates how much of the new state to keep), output (regulates amount of the current cell state to be exposed) and forget gates (regulates how much of the existing memory to forget). On the other hand GRUs achieve this by using a reset and update gates. In fact GRUs are basically LSTMs excluding the output gate and thereby the past hidden states are always visible.
+
+\begin{equation}
+\boldmath
+\begin{cases}
+\text{update-gate} = \sigma(\text{review-text-vector} * U^z + s_{t-1}W^z),\\
+\text{reset-gate} = \sigma(\text{review-text-vector} * U^r + s_{t-1}W^r)
+\end{cases}
+\end{equation}
+
+\underline{\textbf{Step-C}:} We start with 95 features before entering the realm of fully connected layers. These are detailed in the data section that follows. We experimented by varying all the hyper-parameters (like the number of GRU cells, number of layers and other regularization attributes of the wrappers extending standard RNNs). The model we used also incorporates some of the methods NLP (natural language processing) toolkit for the purposes of normalizing, standardizing and controlling the training process:
+\begin{itemize}
+	\item NLTK stop-words removal
+	\item Word2Vec embedding
+	\item tf-Idf featurization
+\end{itemize}
+
+These are explained in the later sections.
+
 %%
 %\points{3}
 
@@ -274,14 +294,14 @@ This mini project was designed to \textit{allow the students to use the theoreti
 
 Regardless of this overall working principle we summarize the main tasks each member was involved in in Table~\ref{tab:roles}. This list contains only the most important responsibilities and must not be mistaken with an overarching list of tasks and responsibilities.
 
-\begin{table}[h!]
+\begin{table}[bh!]
 \centering
  \begin{tabular}{l |l}
  member 		& task \\ \hline
  Aditya		&  dataset analysis, architecture of DL model, data gathering, visualization, \\ 
  			& word embedding , measure accuracy, anatomical feature, reporting,  \\
 			& scheduling tasks, debugging, remote server access\\ \hline
- H≈Ωctor 		&  remote server access, data gathering, measure accuracy, dataset analysis,\\
+ Hector 		&  remote server access, data gathering, measure accuracy, dataset analysis,\\
  			& anatomical feature, reporting, word embedding, scheduling tasks, debugging, \\
 			& architecture of DL model, visualization\\ \hline
  Maximilian 	& word embedding ,reporting, anatomical feature, remote server access,\\
