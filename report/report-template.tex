@@ -135,26 +135,25 @@ The approach, as seen in Figure\defaulttext{cite here}, is actually very intuiti
 	
 	The rating is also evident, as it's the numerical opinion of the product by the reviewer.
 	
-	\item[NLP features] We used several Natural Language Processing functionalities as a part of our architecture that we adapted from the baseline model:\defaulttext{one two lines about, why, how}
+	\item[Anatomical encoder] We used an encoder to extract common Natural Language Processing features we found very valuables in the baseline model, like the number of tokens, the length of those, the number of characters in the token, etc. Which are produced by using techniques like:
 	\begin{enumerate}
 		\item tf-idf featurization
-		\item stemmer
+		\item stemming
 		\item unigram normalization
 		\item word2vec
 	\end{enumerate}
 	
-	\item[Logistic regression] 
-	we have two regression models to classify good and bad reviews respectively.
-	there is only one hyper-parameter, a regularization variable to avoid overfitting. With simple binary search we could find the optimal value at $1$ for the good reviews dataset and $0.23$ for the bad reviews one.
+	\item[Logistic regression] We applied logistic regression with $l_2$ regularization to the td-idf features of the top 12.000 text reviews words, stemmed to reduce the set of $n$-grams to consider. We have two regression models to classify good and bad reviews respectively. There is only one hyper-parameter, a regularization variable to avoid overfitting. With simple binary search we could find the optimal value at $1$ for the good reviews dataset and $0.23$ for the bad reviews one.
 	
-	\item[Recurrent networks] description, Adam
+	\item[Recurrent networks] dropout adam. were fed with a word2vec model of the 
 \end{description}
+
+\defaulttext{barplot here}
 
 we tried with some variations
 
-\subsection{LSTMs}
-another type of grus
-Adam
+\subsection{LSTMs variations}
+cell size
 
 \subsection{GRUs}
 as explained in the methods
