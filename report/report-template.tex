@@ -80,6 +80,26 @@
 
 \section{Introduction}
 
+Amazon as a primary and one of the most frequented sources for online shopping has evolved rapidly over the past 20 years as it started to sell books only but quickly widened its product range to offer e.g. videos, music, electronics and many more. Amazon influenced the status quo of different industries like very few other companies in the world - the most recent change to additionally build convenience stores will shake up the the grocery industry by essentially eliminating the need for checkout lines.
+
+The advantages of e-commerce like the vast selection of products paired with the convenience of performing the purchase regardless of location and time come hand in hand with one disadvantage - the consumer lacks the possibility to physically examine and test if the product satisfies the individual needs. But online retailers such as Amazon try to make up for this disadvantage by giving costumers to opportunity to provide feedback about individual products.
+
+Research shows, that sales are directly influenced by the presence and the content of product reviews \cite{ChXi08}. But both consumers as well as online retailers face the challenge of identifying the most insightful reviews given the vast number of content associated with the specific product. Hence Amazon introduced a feature to rate the helpfulness of a give product review. This rating will help Amazon - and the consumer - to rank and thus prioritize the display of the most helpful reviews. This procedure only works well if the product is viewed frequently and its reviews are rated by many potential consumers. But both consumers as well as Amazon have an interest in also ranking and prioritizing those reviews, which have not yet been rated as helpful by sufficient readers.
+
+In order to tackle the above mentioned challenge we have implemented and trained a recurrent neural network in order for it to learn those aspects of a review that consumers value and thus rate as helpful and then apply the trained model on unseen test data and evaluate the accuracy of the predicted. 
+
+For this purpose we define the following:
+
+\begin{itemize}
+\setlength\itemsep{0em}
+\item we denote $f_p$ as the number of positive feedback an Amazon review $r$ received
+\item hence $f_n$ denotes consequently the number of negative feedback an Amazon review $r$ received
+\item $f$ denotes the total number of votes received by an Amazon review $r$, such that $f = f_p + f_n$
+\item $s_r$ denotes the score of helpfulness of an Amazon review $r$, where: $$ s_r = \frac{f_p}{f_p + f_n} = \frac{f_p}{f}$$
+$s_r$ gives the percentage of readers who found that the review $r$ was helpful. Furthermore we consider a review $r$ to be \textit{good} if $s_r > 0.80$ and we consider it to be \textit{bad} if $s_r < 0.20$.
+\end{itemize}
+
+
 
 
 \defaulttext{Describe the machine learning problem you have addressed in your mini
