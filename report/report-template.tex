@@ -293,7 +293,7 @@ We varied the following parameters and hyper-parameters of the neural network:
 	\item The number of GRU layers. The base paper empirically proved that 2 layered LSTM performed well in comparison to a single one. We started with the same premise and validated the same. We also noticed that increasing the number of layers further did not have any impact on the results, but increased the time required for training drastically. A reason we inferred for this is relies on the constraints of the number of features.
 \end{itemize}
 
-\subsection{Features relevance}
+\subsection{Features relevance}\label{subsec:features_relevance}
 During the implementation, we questioned the utility of \textit{product id} and \textit{reviewer id} context features. We thought that feed some identifiers to the network don't make any sense. We tried to train the model without those features, which resulted into worse accuracy.
 
 \section{Results}
@@ -306,22 +306,28 @@ During the implementation, we questioned the utility of \textit{product id} and 
 
 \begin{table}[h]
 	\centering
-	\caption{Final results}
 	\label{table:final_results}
 	\begin{tabular}{ccccc}
 		& \multicolumn{2}{c}{\textbf{Performance}} & \multicolumn{2}{c}{\textbf{Time}} \\
 		\textbf{}                                                                          & good                & bad                & good            & bad             \\ \hline
 		\textbf{Baseline (LSTMs)}                                                                  & 0.748               & 0.72               & 1h 53m             & 1h 57m             \\ \hline
 		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (with both\\ context features)\end{tabular}} & 0.775               & 0.751              & 1h 23m          & 1h 28m          \\ \hline
-		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs without\\ reviewer id\end{tabular}}        & 0.682               & 0.613              & 1h 22m          & 1h 24m          \\ \hline
-		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs without\\ product id\end{tabular}}         & 0.663               & 0.637              & 1h 14m          & 1h 24m          \\ \hline
-		\textbf{\begin{tabular}[c]{@{}c@{}}Without both\\ context features\end{tabular}}   & 0.596               & 0.594              & 1h 16m          & 1h 20m         
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without\\ reviewer id)\end{tabular}}        & 0.682               & 0.613              & 1h 22m          & 1h 24m          \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without\\ product id)\end{tabular}}         & 0.663               & 0.637              & 1h 14m          & 1h 24m          \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without both\\ context features)\end{tabular}}   & 0.616               & 0.594              & 1h 16m          & 1h 20m         
 	\end{tabular}
+	\caption{Final results; test set performance and training time}
 \end{table}
 
-
+The most noticeable matter from the table is that we reduced the training time significantly, only by changing the recurrent unit. The performance also improved slightly.
 
 \subsection{LSTM vs GRU}
+Our main difference from the base line, after all the experimentation, is the switch from Long Short-Term Memory units to Gated Recurrent Units. The gain was evident performance and time-wise.
+
+\subsection{Features relevance}
+As discussed in Subsection \ref{sec:main_model_framework} and \ref{subsec:features_relevance}, the context features did have influence in the model training. The reason is that deeper connections can be done knowing the source of the review.
+
+From our final model ("GRUs (with both context features)" in the table) to the same model without the reviewer and the product identifiers, a drop of around $15\%$ in performance can be seen. It also reduced is training time, but the change is negligible.
 
 \section{Discussion}
 
