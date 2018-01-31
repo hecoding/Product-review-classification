@@ -154,10 +154,10 @@ We started by validating the baseline architecture by using updated amazon produ
 \underline{\textbf{Step-B}:} The architecture used is outlined in the Figure below.
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=1.05\linewidth,height=9cm]{pics/arch_good}
+	\includegraphics[width=1.05\linewidth]{pics/arch.png}
 	\captionsetup{justification=centering,margin=2cm}
 	\caption{Modified Network Architecture}
-	\label{pic:distri}
+	\label{pic:arch}
 \end{figure}
 
 As we know RNNs are designed for handling variable length sequential input by way of shared, recurrent hidden states. They weren't efficient because of the vanishing and exploding gradient issue and the obvious memory constraints until the conception of LSTMs and GRUs (Gated Recurrent Units) at a later point of time. These improved models still solve the same goals of mitigating and tracking long-term dependencies, but effectively. 
