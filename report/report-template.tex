@@ -20,9 +20,9 @@
 \usepackage{multirow}
 \usepackage{float}
 
-\hypersetup{						%get rid of red box around hyperlink
-pdfborder = {0 0 0}
-}
+%\hypersetup{						%get rid of red box around hyperlink
+%pdfborder = {0 0 0}
+%}
 
 \usepackage{listings} 				% noice code inclusion
 \usepackage{color}
@@ -186,8 +186,7 @@ the table(s) and image(s) in the text and describe them.}
 
 After the training had finished we wanted to get a deeper understanding of the importance of the features which are fed into the three stacked fully connected layers. Therefore we read out the weight matrix which is used to bundle the 95 features together to the desired binary output. We computed the mean of the absolute weights for all 95 features in order to quantify the information flow from the input layer to the first fully connected layer.
 
-Figure~\ref{pic:weights:tot} shows the 
-
+Figure~\ref{pic:weights:tot} shows the mean of the absolute weights for all 95 features in the same order as they are displayed in Figure~\ref{pic:arch}. Hence the last 50 features reflect the average weight put on the GRU output. This figure demonstrates already one intuition, the GRU is the crucial part of this model and thus receives most of the weight.
 
 \begin{figure}[h!]
 \centering
@@ -197,6 +196,8 @@ Figure~\ref{pic:weights:tot} shows the
 \label{pic:weights:tot}
 \end{figure}
 
+This characteristic becomes even more clear, when we group the weights together according to the superior category (such as product ID, product category, overall rating etc.) and normalize them by the number of features in the respective categories. The result of this grouping is shown in Figure~\ref{pic:weights:imp}. There we can see that the average weight which is associated to features belonging to the GRU is on average five times higher than the average weight associated to any other feature for both the good and the bad model. This underlines the significance of the GRU even more as it quantifies it to other feature categories of the model.
+
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.8\linewidth]{../weights/plot_importance.png}
@@ -204,7 +205,6 @@ Figure~\ref{pic:weights:tot} shows the
 \caption{Feature importance for good and bad dataset after the training}
 \label{pic:weights:imp}
 \end{figure}
-
 
 \defaulttext{Discuss your results in comparison with comparable results your have
 found in the literature and web.  Explain any other findings you made
