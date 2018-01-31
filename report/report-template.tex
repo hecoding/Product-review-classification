@@ -316,10 +316,10 @@ During the implementation, we questioned the utility of \textit{product id} and 
 		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without\\ product id)\end{tabular}}         & 0.663               & 0.637              & 1h 14m          & 1h 24m          \\ \hline
 		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without both\\ context features)\end{tabular}}   & 0.616               & 0.594              & 1h 16m          & 1h 20m         
 	\end{tabular}
-	\caption{Final results; test set performance and training time}
+	\caption{Final results: test set performance and training time}
 \end{table}
 
-The most noticeable matter from the table is that we reduced the training time significantly, only by changing the recurrent unit. The performance also improved slightly.
+The results of our mini project are summarized in Table~\ref{tab:results}. The most noticeable matter in this table is, that we reduced the training time significantly by changing the recurrent unit from LSTMs to GRUs. Simultaneously the performance was also improved.
 
 \subsection{LSTM vs GRU}
 Our main difference from the base line, after all the experimentation, is the switch from Long Short-Term Memory units to Gated Recurrent Units. The gain was evident performance and time-wise.
