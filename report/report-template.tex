@@ -255,27 +255,144 @@ Additionally we preprocessed the data with the following operations:
 
 \section{Experiments}
 
-\defaulttext{Explain the goal and implementation of your experiments.  Tell what
-hyperparameters values you experimented with and what other
-variations in the method you tested.}
-%%
-\points{5}
+%\defaulttext{Explain the goal and implementation of your experiments.  Tell what
+%hyperparameters values you experimented with and what other
+%variations in the method you tested.}
+%%%
+%\points{5}
+
+As stated in our methodology, we started evaluating baseline models to prove their assertions true. We found a convincing architecture which performed well on the test set, so we proceeded to implement in \textit{TensorFlow}. This library has the advantage, that many modules are already implemented. We also used \textit{nltk} for word stemming, \textit{gensim} for word embedding, \textit{pandas} to handle the datasets, \textit{sk-learn} for t-SNE computation and \textit{matplotlib} for visualizations.
+
+The schema implemented is explained next. The design variations are discussed following to it.
+
+\subsection{Main model framework}\label{sec:main_model_framework}
+The approach, is displayed in Figure \ref{pic:arch}. At the end we have one set of fully-connected layers with a softmax function. They are configured with length $75, 50$ and $30$, leakyRELU ($max(0.01x, x)$) as the activation function and dropout \cite{dropout:JMLR:v15:srivastava14a} as regularization. This network is fed with a number of high-level input features. Namely:
+\begin{description}
+	\item[Product id, reviewer id, category, rating] We wanted to take into account the crucial relations of the product reviews with their source; the reviewer themself. I.e. If a reviewer explains their thoughts more concisely than others. For that purpose we feed the network with those labels, taken directly from the dataset.
+	
+	The category also makes sense to appear, as some reviewers have more expertise than others on certain areas, which allows them to produce higher-quality reviews.
+	
+	The rating is also evident, as it's the numerical opinion of the product by the reviewer.
+	
+	\item[Anatomical encoder] We used an encoder to extract common Natural Language Processing features we found valuable in the baseline model, like the number of tokens, the length of those, the number of characters in the token, etc. Which are produced by using techniques like:
+	\begin{itemize}
+		\item \textbf{Tf-idf featurization} \cite{tfidf:Ramos2003UsingTT} a statistic to measure how important a word is regarding the whole document. Which internally uses \textit{uni-gram normalization}.
+		\item \textbf{Stemming} to reduce words to they root form, and use them as tokens.
+		\item \textbf{Word2vec} \cite{word2vec:DBLP:journals/corr/abs-1301-3781} Word embeddings that produce a vector space, with each word corresponding to a vector in that space. Words that are related on a context are positioned close to each other. This help us creating a useful representation of the words.
+	\end{itemize}
+	
+	\item[Logistic regression] We applied logistic regression with $l_2$ regularization to the td-idf features of the top 12.000 text reviews words, stemmed to reduce the set of $n$-grams to consider. We have two regression models to classify good and bad reviews respectively. There is only one hyper-parameter, a regularization variable to avoid overfitting. With simple binary search we could find the optimal value at $1$ for the good reviews dataset and $0.23$ for the bad reviews one.
+	
+	\item[Recurrent networks] A well known recurrent neural network was used for modelling the temporal data, \textit{Long Short-Term Memory} nets \cite{Hochreiter:1997:LSM:1246443.1246450}. It was fed with a pre-trained \textit{word2vec} model of the reviews. We used 50 units for the configuration, the regularization method was \textit{dropout} and we applied \textit{Adam} \cite{adam:DBLP:journals/corr/KingmaB14} parameter optimizer.
+\end{description}
+
+After understanding, implementing and engineering the model training to use \textit{Paniikki} machines, we started with our own variations to try to improve the baseline performance or accuracy. The most important ones are mentioned in the following subsections.
+
+\subsection{GRUs}
+LSTMs are just one type of recurrent cell. There are a wide range of different ones, with their own pros and cons. As explained in the methods section, we took into consideration Gated Recurrent Units \cite{gru:DBLP:journals/corr/ChungGCB14} (GRUs) because it seemed most appropriate.
+
+We used the same configuration as for the LSTM units, with the same optimizer (Adam).
+
+\subsection{Parameter variations}
+We varied the following parameters and hyper-parameters of the neural network:
+\begin{itemize}
+	\item The number of units in each GRU cell. Ranging from 25 to 95 units with a step interval of 10, before concluding for 50.
+	\item The number of GRU layers. The base paper empirically proved that 2 layered LSTM performed well in comparison to a single one. We started with the same premise and validated the same. We also noticed that increasing the number of layers further did not have any impact on the results, but increased the time required for training drastically. A reason we inferred for this is relies on the constraints of the number of features.
+\end{itemize}
+
+\subsection{Features relevance}\label{subsec:features_relevance}
+During the implementation, we questioned the utility of \textit{product id} and \textit{reviewer id} context features. We thought that feed some identifiers to the network don't make any sense. We tried to train the model without those features, which resulted into worse accuracy.
 
 \section{Results}
 
-\defaulttext{Give the results of your experiments in a table and explain them in
-the text.  Some figures would be good here for illustration.  Refer to
-the table(s) and image(s) in the text and describe them.}
-%%
-\points{5}
+%\defaulttext{Give the results of your experiments in a table and explain them in
+%	the text.  Some figures would be good here for illustration.  Refer to
+%	the table(s) and image(s) in the text and describe them.}
+%%%
+%\points{5}
+
+The quantitative results of our mini project are summarized in Table~\ref{table:finalresults}. Figure \ref{pic:finalresults} displays the receiving operating characteristic (ROC) plots for the final model. The most noticeable matter in this table is, that we reduced the training time significantly by changing the recurrent unit from LSTMs to GRUs. Simultaneously the performance was also improved.
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{ccccc}
+		& \multicolumn{2}{c}{\textbf{Performance}} & \multicolumn{2}{c}{\textbf{Time}} \\
+		\textbf{}                                                                          & good                & bad                & good            & bad             \\ \hline
+		\textbf{Baseline (LSTMs)}                                                                  & 0.748               & 0.72               & 1h 53m             & 1h 57m             \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (with both\\ context features)\end{tabular}} & 0.775               & 0.751              & 1h 23m          & 1h 28m          \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without\\ reviewer id)\end{tabular}}        & 0.682               & 0.613              & 1h 22m          & 1h 24m          \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without\\ product id)\end{tabular}}         & 0.663               & 0.637              & 1h 14m          & 1h 24m          \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without both\\ context features)\end{tabular}}   & 0.616               & 0.594              & 1h 16m          & 1h 20m         
+	\end{tabular}
+	\caption{Final results: test set performance and training time}
+	\label{table:finalresults}
+\end{table}
+
+\begin{figure}[ht!]
+	\begin{center}
+		\subfigure[good dataset]{%
+			\includegraphics[width=0.5\textwidth]{../plots/good_run_50k_step_9850.png}
+		}%
+		\subfigure[bad dataset]{%
+			\includegraphics[width=0.5\textwidth]{../plots/bad_run_50k_step_8200.png}
+		}
+	\end{center}
+	\caption{Receiving operating characteristic (ROC) plots for the final model.}
+	\label{pic:finalresults}
+\end{figure}
+
+\subsection{LSTM vs GRU}
+Our main difference from the base line, after all the experimentation, is the switch from Long Short-Term Memory units to Gated Recurrent Units. The change resulted in both a performance boost and a computational time improvement.
+
+\subsection{Features relevance}
+As discussed in Subsection \ref{sec:main_model_framework} and \ref{subsec:features_relevance}, the context features did have influence in the model training. The reason is that deeper connections can be done knowing the source of the review.
+
+From our final model ("GRUs (with both context features)" in the table) to the same model without the reviewer and the product identifiers, a drop of around $15\%$ in performance can be seen. It also reduced is training time, but the change is negligible.
 
 \section{Discussion}
+\subsection{Comparisons}
+\begin{table}[bh!]
+	\begin{tabular}{p{5cm}|p{3cm}|p{3cm}|p{3cm}}
+		\textbf{Model} & \textbf{Test-Accuracy} (good classifier) & \textbf{Test-Accuracy} (bad-classifier) & \textbf{Test-Accuracy} (generic classifier) \\ \hline
+		Collaborative Filtering                    & NA                              & NA                             & 0.79               \\ \hline
+		Using GRUs                                 & 0.775                           & 0.751                          & ~                  \\ \hline 
+		Amazon Comprehend (sentiment analysis API) & 0.09                            & 0.01                           & 0.89 (mixed)       \\
+	\end{tabular}
+	 \caption{Comparison of our results with existing ones}
+	 \label{tab:comp}
 
-\defaulttext{Discuss your results in comparison with comparable results your have
-found in the literature and web.  Explain any other findings you made
-while running the experiments.}
-%%
-\points{4}
+\end{table}
+
+From the comparisons displayed in Table~\ref{tab:comp} it is evident on why there is tremendous research on sentiment analysis. The leading publication we have found on web (that specifically deals with product reviews sentiment analysis), claims to achieve $\sim79$\% accuracy till date. We can also observe that Amazon is working on natural language processing and its efforts are still novice in the domain.
+	
+\subsection{Training Insights}
+After the training had finished we wanted to get a deeper understanding of the importance of features which are fed into the three stacked fully connected layers. Therefore we read out the weight matrix which is used to bundle the 95 features together to the desired binary output. We computed the mean of the absolute weights for all 95 features in order to quantify the information flow from the input layer to the first fully connected layer.
+
+Figure~\ref{pic:weights:tot} shows the mean of the absolute weights for all 95 features in the same order as they are displayed in Figure~\ref{pic:arch}. Hence the last 50 features reflect the average weight put on the GRU output. This figure demonstrates already one intuition, the GRU is the crucial part of this model and thus receives most of the weight.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\linewidth]{../weights/plot_weights.png}
+\captionsetup{justification=centering}
+\caption{Individual feature weight for good and bad dataset after the training}
+\label{pic:weights:tot}
+\end{figure}
+
+This characteristic becomes even more clear, when we group the weights together according to the superior category (such as product ID, product category, overall rating etc.) and normalize them by the number of features in the respective categories. The result of this grouping is shown in Figure~\ref{pic:weights:imp}. There we can see that the average weight which is associated to features belonging to the GRU is on average five times higher than the average weight associated to any other feature for both the good and the bad model. This underlines the significance of the GRU even more as it quantifies it to other feature categories of the model.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\linewidth]{../weights/plot_importance.png}
+\captionsetup{justification=centering}
+\caption{Feature importance for good and bad dataset after the training}
+\label{pic:weights:imp}
+\end{figure}
+
+%\defaulttext{Discuss your results in comparison with comparable results your have
+%found in the literature and web.  Explain any other findings you made
+%while running the experiments.}
+%%%
+%\points{4}
 
 \section{Conclusions}
 
