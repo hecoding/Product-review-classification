@@ -263,8 +263,20 @@ the table(s) and image(s) in the text and describe them.}
 \points{5}
 
 \section{Discussion}
+\subsection{Comparisons}
+\begin{table}[bh!]
+	\begin{tabular}{p{5cm}|p{3cm}|p{3cm}|p{3cm}}
+		\textbf{Model} & \textbf{Test-Accuracy} (good classifier) & \textbf{Test-Accuracy} (bad-classifier) & \textbf{Test-Accuracy} (generic classifier) \\ \hline
+		Collaborative Filtering                    & NA                              & NA                             & 0.79               \\ \hline
+		Using GRUs                                 & 0.775                           & 0.751                          & ~                  \\ \hline 
+		Amazon Comprehend (sentiment analysis API) & 0.09                            & 0.01                           & 0.89 (mixed)       \\
+	\end{tabular}
+\end{table}
 
-After the training had finished we wanted to get a deeper understanding of the importance of the features which are fed into the three stacked fully connected layers. Therefore we read out the weight matrix which is used to bundle the 95 features together to the desired binary output. We computed the mean of the absolute weights for all 95 features in order to quantify the information flow from the input layer to the first fully connected layer.
+From the comparisons it is evident on why there is tremendous research on sentiment analysis. The leading publication we have found on web (that specifically deals with product reviews sentiment analysis), claims to achieve $\sim79$\% accuracy till date. We can also observe that Amazon is working on natural language processing and its efforts are still novice in the domain.
+	
+\subsection{Training Insights}
+After the training had finished we wanted to get a deeper understanding of the importance of features which are fed into the three stacked fully connected layers. Therefore we read out the weight matrix which is used to bundle the 95 features together to the desired binary output. We computed the mean of the absolute weights for all 95 features in order to quantify the information flow from the input layer to the first fully connected layer.
 
 Figure~\ref{pic:weights:tot} shows the mean of the absolute weights for all 95 features in the same order as they are displayed in Figure~\ref{pic:arch}. Hence the last 50 features reflect the average weight put on the GRU output. This figure demonstrates already one intuition, the GRU is the crucial part of this model and thus receives most of the weight.
 
