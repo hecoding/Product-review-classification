@@ -192,9 +192,15 @@ while running the experiments.}
 
 \section{Conclusions}
 
-\defaulttext{Give your final conclusions from the whole mini project and its results.}
+This mini project consists in the comparison and improvement of the existing LSTM model \cite{wei} and shows, that using GRU instead of LSTM by itself is reflecting in improved results. 
+ 
+Firstly we had to take care of the heavily skewed dataset towards good reviews, which we did by unskewing the data. This steps enables every deep learning model applied to this dataset to correctly learn the underlying importance of features rather than just reflecting the dominating presence of good reviews.
+
+Overall the results show, that a binary classification for good reviews is more accurate than the classification for bad reviews. This is not that surprising after all, as helpful reviews tend to be both well structured and well written in terms of vocabulary. Bad reviews on the other hand are generally shorter and written in a less extensive way. Thus the model for the good reviews has more characteristics it can learn from. This point is also backed up by the t-SNE representation of the data displayed in Figure~\ref{pic:tsne}. The cluster representation of the good reviews is slightly sharper defined than the one representing bad reviews.
+
+%\defaulttext{Give your final conclusions from the whole mini project and its results.}
 %%
-\points{3}
+%\points{3}
 
 \section{References}
 
