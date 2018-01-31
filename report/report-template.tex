@@ -160,7 +160,7 @@ We started by validating the baseline architecture by using updated amazon produ
 	\label{pic:arch}
 \end{figure}
 
-As we know RNNs are designed for handling variable length sequential input by way of shared, recurrent hidden states. They weren't efficient because of the vanishing and exploding gradient issue and the obvious memory constraints until the conception of LSTMs and GRUs (Gated Recurrent Units) at a later point of time. These improved models still solve the same goals of mitigating and tracking long-term dependencies, but effectively. 
+As we know RNNs are designed for handling variable length sequential input by way of shared, recurrent hidden states. They weren't efficient because of the vanishing and exploding gradient issue and the obvious memory constraints until the conception of LSTMs and GRUs (Gated Recurrent Units) at a later point of time. These improved models still solve the same goals of mitigating and tracking long-term dependencies, but more effectively. 
 
 The LSTMs achieve this via the input (regulates how much of the new state to keep), output (regulates amount of the current cell state to be exposed) and forget gates (regulates how much of the existing memory to forget). On the other hand GRUs achieve this by using a reset and update gates. In fact GRUs are basically LSTMs excluding the output gate and thereby the past hidden states are always visible.
 
@@ -172,7 +172,7 @@ The LSTMs achieve this via the input (regulates how much of the new state to kee
 \end{cases}
 \end{equation}
 
-\underline{\textbf{Step-C}:} We start with 95 features before entering the realm of fully connected layers. These are detailed in the data section that follows. We experimented by varying all the hyper-parameters (like the number of GRU cells, number of layers and other regularization attributes of the wrappers extending standard RNNs). The model we used also incorporates some of the methods NLP (natural language processing) toolkit for the purposes of normalizing, standardizing and controlling the training process:
+\underline{\textbf{Step-C}:} We start with 95 features before entering the realm of fully connected layers. These are detailed in the \nameref{sec:data} section that follows. We experimented by varying all the hyper-parameters (like the number of GRU cells, number of layers and other regularization attributes of the wrappers extending standard RNNs). The model we used also incorporates some of the methods NLP (natural language processing) toolkit for the purposes of normalizing, standardizing and controlling the training process:
 \begin{itemize}
 	\item NLTK stop-words removal
 	\item Word2Vec embedding
