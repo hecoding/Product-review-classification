@@ -116,18 +116,18 @@ or by you yourselves.}
 
 \section{Experiments}
 
-\defaulttext{Explain the goal and implementation of your experiments.  Tell what
-hyperparameters values you experimented with and what other
-variations in the method you tested.}
-%%
-\points{5}
+%\defaulttext{Explain the goal and implementation of your experiments.  Tell what
+%hyperparameters values you experimented with and what other
+%variations in the method you tested.}
+%%%
+%\points{5}
 
-As stated in our methodology, we started evaluating baseline models to prove their assertions true. We found a very convincing architecture which performed very well on the test set, so we proceeded to implement in \textit{TensorFlow}\defaulttext{cite here}. This library is of relatively easy use and has many modules already implemented. We also used \textit{nltk} for word stemming, \textit{gensim} for word embedding, \textit{pandas} to handle the datasets, \textit{sk-learn} for t-SNE computation and \textit{matplotlib} for visualizations.
+As stated in our methodology, we started evaluating baseline models to prove their assertions true. We found a very convincing architecture which performed very well on the test set, so we proceeded to implement in \textit{TensorFlow}. This library is of relatively easy use and has many modules already implemented. We also used \textit{nltk} for word stemming, \textit{gensim} for word embedding, \textit{pandas} to handle the datasets, \textit{sk-learn} for t-SNE computation and \textit{matplotlib} for visualizations.
 
 The schema implemented is explained next. The design variations are discussed following to it.
 
-\subsection{Main model framework}
-The approach, as seen in Figure\defaulttext{cite here}, is actually very intuitive. At the end we have one set of fully-connected layers with a softmax function. They are configured with length $75, 50$ and $30$, leakyRELU ($max(0.01x, x)$) as the activation function and dropout as regularization This network is fed with a number of high-level input features. Namely:\defaulttext{put the hyperparameters too}
+\subsection{Main model framework}\label{sec:main_model_framework}
+The approach, as seen in Figure\defaulttext{cite here, model picture}, is actually very intuitive. At the end we have one set of fully-connected layers with a softmax function. They are configured with length $75, 50$ and $30$, leakyRELU ($max(0.01x, x)$) as the activation function and dropout \cite{dropout:JMLR:v15:srivastava14a} as regularization This network is fed with a number of high-level input features. Namely:
 \begin{description}
 	\item[Product id, reviewer id, category, rating] We wanted to take into account the crucial relations of the product reviews with their source; the reviewer themself. I.e. some people explain thing more concisely than others. For that purpose we feed the network with those labels, taken directly from the dataset.
 	
@@ -136,31 +136,33 @@ The approach, as seen in Figure\defaulttext{cite here}, is actually very intuiti
 	The rating is also evident, as it's the numerical opinion of the product by the reviewer.
 	
 	\item[Anatomical encoder] We used an encoder to extract common Natural Language Processing features we found very valuables in the baseline model, like the number of tokens, the length of those, the number of characters in the token, etc. Which are produced by using techniques like:
-	\begin{enumerate}
-		\item tf-idf featurization
-		\item stemming
-		\item unigram normalization
-		\item word2vec
-	\end{enumerate}
+	\begin{itemize}
+		\item \textbf{Tf-idf featurization} \cite{tfidf:Ramos2003UsingTT} a statistic to measure how important a word is regarding the whole document. Which internally uses \textit{uni-gram normalization}.
+		\item \textbf{Stemming} to reduce words to they root form, and use them as tokens.
+		\item \textbf{Word2vec} \cite{word2vec:DBLP:journals/corr/abs-1301-3781} Word embeddings that produce a vector space, with each word corresponding to a vector in that space. Words that are related on a context are positioned close to each other. This help us creating a useful representation of the words.
+	\end{itemize}
 	
 	\item[Logistic regression] We applied logistic regression with $l_2$ regularization to the td-idf features of the top 12.000 text reviews words, stemmed to reduce the set of $n$-grams to consider. We have two regression models to classify good and bad reviews respectively. There is only one hyper-parameter, a regularization variable to avoid overfitting. With simple binary search we could find the optimal value at $1$ for the good reviews dataset and $0.23$ for the bad reviews one.
 	
-	\item[Recurrent networks] dropout adam. were fed with a word2vec model of the 
+	\item[Recurrent networks] A very well known recurrent neural network was used for modelling the temporal data, \textit{Long Short-Term Memory} nets \cite{Hochreiter:1997:LSM:1246443.1246450}. It was fed with a pre-trained \textit{word2vec} model of the reviews. We used 50 units for the configuration, the regularization method was \textit{dropout} and we applied \textit{Adam} \cite{adam:DBLP:journals/corr/KingmaB14} parameter optimizer.
 \end{description}
 
-\defaulttext{barplot here}
-
-we tried with some variations
-
-\subsection{LSTMs variations}
-cell size
+After understanding, implementing and engineering the model training to use \textit{Paniikki} machines, we started with our own variations to try to improve the baseline performance or accuracy. The most remarkable ones are the following.
 
 \subsection{GRUs}
-as explained in the methods
-Adam
+LSTMs are just one type of recurrent cell. There are a wide range of different ones, with their own pros and cons. As explained in the methods section, we took into consideration Gated Recurrent Units \cite{gru:DBLP:journals/corr/ChungGCB14} (GRUs) because it was the most familiar to us.
 
-\subsection{NLP features relevance}
-we took them out
+We used the same configuration as for the LSTM units, with the same optimizer (Adam).
+
+\subsection{Varying params}
+We varied the following parameters and hyper-parameters of the neural network:
+\begin{itemize}
+	\item The number of units in each GRU cell. Ranging from 25 to 95 units with a step interval of 10, before concluding for 50.
+	\item The number of GRU layers. The base paper empirically proved that 2 layered LSTM performed well in comparison to a single one. We started with the same premise and validated the same. We also noticed that increasing the number of layers further did not have any impact on the results. A reason we inferred for this is relies on the constraints of the number of features.
+\end{itemize}
+
+\subsection{Features relevance}
+During the implementation, we questioned the utility of \textit{product id} and \textit{reviewer id} context features. We thought that feed some identifiers to the network don't make any sense. We tried to train the model without those features, which resulted into worse accuracy. By doing that we learn what Section \ref{sec:main_model_framework} explains.
 
 \section{Results}
 
