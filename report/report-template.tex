@@ -304,10 +304,22 @@ During the implementation, we questioned the utility of \textit{product id} and 
 %%
 \points{5}
 
-table: time  performance
-lstms
-grus
-nlp features
+\begin{table}[h]
+	\centering
+	\caption{Final results}
+	\label{table:final_results}
+	\begin{tabular}{ccccc}
+		& \multicolumn{2}{c}{\textbf{Performance}} & \multicolumn{2}{c}{\textbf{Time}} \\
+		\textbf{}                                                                          & good                & bad                & good            & bad             \\ \hline
+		\textbf{Baseline (LSTMs)}                                                                  & 0.748               & 0.72               & 1h 53m             & 1h 57m             \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (with both\\ context features)\end{tabular}} & 0.775               & 0.751              & 1h 23m          & 1h 28m          \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs without\\ reviewer id\end{tabular}}        & 0.682               & 0.613              & 1h 22m          & 1h 24m          \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs without\\ product id\end{tabular}}         & 0.663               & 0.637              & 1h 14m          & 1h 24m          \\ \hline
+		\textbf{\begin{tabular}[c]{@{}c@{}}Without both\\ context features\end{tabular}}   & 0.596               & 0.594              & 1h 16m          & 1h 20m         
+	\end{tabular}
+\end{table}
+
+
 
 \subsection{LSTM vs GRU}
 
