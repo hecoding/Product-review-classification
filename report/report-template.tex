@@ -122,13 +122,61 @@ variations in the method you tested.}
 %%
 \points{5}
 
+As stated in our methodology, we started evaluating baseline models to prove their assertions true. We found a very convincing architecture which performed very well on the test set, so we proceeded to implement in \textit{TensorFlow}\defaulttext{cite here}. This library is of relatively easy use and has many modules already implemented. We also used \textit{nltk} for word stemming, \textit{gensim} for word embedding, \textit{pandas} to handle the datasets, \textit{sk-learn} for t-SNE computation and \textit{matplotlib} for visualizations.
+
+The schema implemented is explained next. The design variations are discussed following to it.
+
+\subsection{Main model framework}
+The approach, as seen in Figure\defaulttext{cite here}, is actually very intuitive. At the end we have one set of fully-connected layers with a softmax function. They are configured with length $75, 50$ and $30$, leakyRELU ($max(0.01x, x)$) as the activation function and dropout as regularization This network is fed with a number of high-level input features. Namely:\defaulttext{put the hyperparameters too}
+\begin{description}
+	\item[Product id, reviewer id, category, rating] We wanted to take into account the crucial relations of the product reviews with their source; the reviewer themself. I.e. some people explain thing more concisely than others. For that purpose we feed the network with those labels, taken directly from the dataset.
+	
+	The category also makes sense to appear, as some people have more expertise than other on certain areas. Which allows them to produce higher-quality reviews.
+	
+	The rating is also evident, as it's the numerical opinion of the product by the reviewer.
+	
+	\item[NLP features] We used several Natural Language Processing functionalities as a part of our architecture that we adapted from the baseline model:\defaulttext{one two lines about, why, how}
+	\begin{enumerate}
+		\item tf-idf featurization
+		\item stemmer
+		\item unigram normalization
+		\item word2vec
+	\end{enumerate}
+	
+	\item[Logistic regression] 
+	we have two regression models to classify good and bad reviews respectively.
+	there is only one hyper-parameter, a regularization variable to avoid overfitting. With simple binary search we could find the optimal value at $1$ for the good reviews dataset and $0.23$ for the bad reviews one.
+	
+	\item[Recurrent networks] description, Adam
+\end{description}
+
+we tried with some variations
+
+\subsection{LSTMs}
+another type of grus
+Adam
+
+\subsection{GRUs}
+as explained in the methods
+Adam
+
+\subsection{NLP features relevance}
+we took them out
+
 \section{Results}
 
 \defaulttext{Give the results of your experiments in a table and explain them in
-the text.  Some figures would be good here for illustration.  Refer to
-the table(s) and image(s) in the text and describe them.}
+	the text.  Some figures would be good here for illustration.  Refer to
+	the table(s) and image(s) in the text and describe them.}
 %%
 \points{5}
+
+table: time  performance
+lstms
+grus
+nlp features
+
+\subsection{LSTM vs GRU}
 
 \section{Discussion}
 
