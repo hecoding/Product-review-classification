@@ -4,8 +4,8 @@
 
 \usepackage[latin1,applemac]{inputenc}	%% deutsche Umlaute wie normale
  								%% Buchstaben verwenden 
- 								%% (ansonsten muesste √§ durch a getippt werden)
-\usepackage{a4wide} 				%% kleinere Seitenr≈†nder
+ 								%% (ansonsten muesste Ã? durch a getippt werden)
+\usepackage{a4wide} 				%% kleinere SeitenrÅ nder
 
 \usepackage{amssymb,amsthm,amsfonts, amsmath}
 								%% diverse Matheerweiterungen, z.B. \implies
@@ -26,6 +26,7 @@
 
 \usepackage{listings} 				% noice code inclusion
 \usepackage{color}
+
 
 \definecolor{deepblue}{rgb}{0,0,0.5}
 \definecolor{deepred}{rgb}{0.6,0,0}
@@ -50,14 +51,15 @@
 
 \begin{document}
 
+\renewcommand{\refname}{}
+
 \title{Title of the Mini Project\\
 \normalsize (MP 004 Firing Neurons)}
 
-\author{H≈Ωctor Laria Mantec‚Äîn (662134) \and Maximilian Proll (662529)
+\author{Héctor Laria Mantecón (662134) \and Maximilian Proll (662529)
   \and Aditya Kaushik Surikuchi (662862)}
 
 \maketitle
-
 \newcommand{\points}[1]{\par\noindent\textit{(#1 points)}}
 \newcommand{\onepoint}{\par\noindent\textit{(1 point)}}
 \newcommand{\defaulttext}[1]{\textit{\textcolor{red}{#1}}}
@@ -131,24 +133,61 @@ Figure~\ref{pic:tsne} encourages us to differentiate the analysis and training f
 There are many proposed solutions for text classification problems. They involve both neural and non-neural techniques. Some of the prior work on Amazon movie reviews has shown that ensemble learning using derived features (like review length, product rating) which performed better in comparison to plain classification methods like SVMs or logistic regression.
 Other work used contextual metadata features (like product category, reviewer details) which seemed to work when using non-neural models.
 
-Around 2011, deep networks starting becoming popular after the conception of convolutional neural nets\cite{DBLP:journals/corr/Kim14f} for sentence classification. They started to consistently perform better compared to the conventional classification methods listed above. Gradually when RNNs (recurrent neural nets) came into picture researchers started to take advantage of the architecture. Specifically, the introduction of LSTMs started to revolutionize the challenging domains of speech recognition, machine translation and image captioning.
+Around 2011, deep networks starting becoming popular after the conception of convolutional neural nets\cite{DBLP:journals/corr/Kim14f} for sentence classification. They started to consistently perform better compared to the conventional classification methods listed above. Gradually when RNNs (recurrent neural nets) came into picture researchers started to take advantage of the architecture. Specifically, the introduction of LSTMs (Long Short-Term Memory Units) started to revolutionize the challenging domains of speech recognition, machine translation and image captioning.
 
 Owing to such growing popularity of LSTMs there were many deep network architectures researched, built and published leveraging multiple-layers of LSTMs for the natural language processing domain. One such notable work is for predicting product review helpfulness using a deep net arch with 2 LSTM layers along with sophisticated NLP features\cite{wei}. 
 %%
 
 \section{Method}
 
-\defaulttext{Describe your chosen solution in sufficient detail.  Pay special
-attention to describing the deep learning algorithm(s) you used.  Show
-some essential equations and describe all hyper-parameters that are
-involved in the method.}
+Considering the fact that there already are state of the art solutions to this problem of product review helpfulness, that are adopted by the e-commerce world, we approached this problem from an empirical perspective:
+\begin{enumerate}
+	\item[Step-A:] Choosing an existing model and validating it with updated load of amazon-reviews.
+	\item[Step-B:] Replacing modules of the design by using recent ideas in deep learning.
+	\item[Step-C:] Analyzing and experimenting by toggling various features.
+\end{enumerate}
+
+\underline{\textbf{Step-A}:} As mentioned in previous section, we used Predicting Amazon Product Review Helpfulness \cite{wei}, as our baseline model. This architecture takes advantage of LSTMs which efficiently understand temporal relationships in time sequence data. Specifically, LSTMs serve the purpose of distinguishing word strings in a given product review well.
+
+We started by validating the baseline architecture by using updated amazon product reviews from 24 categories\cite{McATarShiHen15} further described in the Data section. Experimentation process and obtained results are explained in later sections.
+
+\underline{\textbf{Step-B}:} The architecture used is outlined in the Figure below.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1.05\linewidth]{pics/arch.png}
+	\captionsetup{justification=centering,margin=2cm}
+	\caption{Modified Network Architecture}
+	\label{pic:arch}
+\end{figure}
+
+As we know RNNs are designed for handling variable length sequential input by way of shared, recurrent hidden states. They weren't efficient because of the vanishing and exploding gradient issue and the obvious memory constraints until the conception of LSTMs and GRUs (Gated Recurrent Units) at a later point of time. These improved models still solve the same goals of mitigating and tracking long-term dependencies, but more effectively. 
+
+The LSTMs achieve this via the input (regulates how much of the new state to keep), output (regulates amount of the current cell state to be exposed) and forget gates (regulates how much of the existing memory to forget). On the other hand GRUs achieve this by using a reset and update gates. In fact GRUs are basically LSTMs excluding the output gate and thereby the past hidden states are always visible.
+
+\begin{equation}
+\boldmath
+\begin{cases}
+\text{update-gate} = \sigma(\text{review-text-vector} * U^z + s_{t-1}W^z),\\
+\text{reset-gate} = \sigma(\text{review-text-vector} * U^r + s_{t-1}W^r)
+\end{cases}
+\end{equation}
+
+\underline{\textbf{Step-C}:} We start with 95 features before entering the realm of fully connected layers. These are detailed in the \nameref{sec:data} section that follows. We experimented by varying all the hyper-parameters (like the number of GRU cells, number of layers and other regularization attributes of the wrappers extending standard RNNs). The model we used also incorporates some of the methods NLP (natural language processing) toolkit for the purposes of normalizing, standardizing and boosting the training process:
+\begin{itemize}
+	\item NLTK stop-words removal
+	\item Word2Vec embedding
+	\item tf-Idf featurization
+\end{itemize}
+
+These are explained in the later sections.
+
 %%
-\points{3}
+%\points{3}
 
 \section{Data}\label{sec:data}
 \subsection{Description}
 
-The data used for this mini project is the Amazon product review data by Julian McAuley from UC San Diego \cite{HeMcA16a} \cite{McATarShiHen15}. His data contains Amazon product reviews and metadata, including 142.8 million reviews spanning May 1996 - July 2014.
+The data used for this mini project is the Amazon product review data by Julian McAuley from UC San Diego \cite{HeM16} \cite{McATarShiHen15}. His data contains Amazon product reviews and metadata, including 142.8 million reviews spanning May 1996 - July 2014.
 A product review in the dataset is build up by the following fields: \textit{reviewer ID}, \textit{asin} (product ID), \textit{helpful} (tuple of two integers $f_p$ and $f$), \textit{review Text}, \textit{overall} (rating out of five), \textit{summary} and \textit{category} (like books, electronics or digital music).
 An exemplary review is displayed in Table~\ref{tab:JSON}. 
 
@@ -181,7 +220,7 @@ A reduced 5-core version of the dataset can be downloaded from the \href{http://
 
 After leaving out reviews with less than five helpfulness feedback votes we saw, that the distribution of helpfulness scores is not equally distributed but rather skewed, as nearly half of the 3.0 million reviews have a helpfulness score of greater than 0.8. This is displayed in Figure~\ref{pic:distri}. 
 
-In order to evenly distribute the dataset the entire range of the helpfulness score, we unskewed the data by randomly selecting the same number of reviews within a 0.2 helpfulness-score-bucket. The process of unskewing left 1.1 million reviews roughly uniformily distributed in the final dataset.
+In order to evenly distribute the dataset the entire range of the helpfulness score, we unskewed the data by randomly selecting the same number of reviews within a 0.2 helpfulness-score-bucket. The process of unskewing left 1.1 million reviews roughly uniformly distributed in the final dataset.
 
 After we tried to further analyze the full dataset we ran into memory issues as both machines in \textit{Paniikki} as well as servers such as \textit{force} couldn't cope with the vast number of reviews, which is why we decided to reduce the data by randomly sampling a subset of 50,000. 80\% of this dataset are used for both training and validation and the remaining 20\% are used for the final test.
 
@@ -244,13 +283,10 @@ Overall the results show, that a binary classification for good reviews is more 
 %\points{3}
 
 \section{References}
-
 \bibliography{bibliography}{}
 \bibliographystyle{acm}
-
-\defaulttext{Most likely between 5--10 references to related works and results.}
 %%
-\points{2}
+%\points{2}
 
 \section{Roles of the authors}
 
@@ -258,14 +294,14 @@ This mini project was designed to \textit{allow the students to use the theoreti
 
 Regardless of this overall working principle we summarize the main tasks each member was involved in in Table~\ref{tab:roles}. This list contains only the most important responsibilities and must not be mistaken with an overarching list of tasks and responsibilities.
 
-\begin{table}[h!]
+\begin{table}[bh!]
 \centering
  \begin{tabular}{l |l}
  member 		& task \\ \hline
  Aditya		&  dataset analysis, architecture of DL model, data gathering, visualization, \\ 
  			& word embedding , measure accuracy, anatomical feature, reporting,  \\
 			& scheduling tasks, debugging, remote server access\\ \hline
- H≈Ωctor 		&  remote server access, data gathering, measure accuracy, dataset analysis,\\
+ Héctor 		&  remote server access, data gathering, measure accuracy, dataset analysis,\\
  			& anatomical feature, reporting, word embedding, scheduling tasks, debugging, \\
 			& architecture of DL model, visualization\\ \hline
  Maximilian 	& word embedding ,reporting, anatomical feature, remote server access,\\
