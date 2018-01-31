@@ -298,15 +298,16 @@ During the implementation, we questioned the utility of \textit{product id} and 
 
 \section{Results}
 
-\defaulttext{Give the results of your experiments in a table and explain them in
-	the text.  Some figures would be good here for illustration.  Refer to
-	the table(s) and image(s) in the text and describe them.}
-%%
-\points{5}
+%\defaulttext{Give the results of your experiments in a table and explain them in
+%	the text.  Some figures would be good here for illustration.  Refer to
+%	the table(s) and image(s) in the text and describe them.}
+%%%
+%\points{5}
+
+The quantitative results of our mini project are summarized in Table~\ref{table:finalresults}. Figure \ref{pic:finalresults} displays the receiving operating characteristic (ROC) plots for the final model. The most noticeable matter in this table is, that we reduced the training time significantly by changing the recurrent unit from LSTMs to GRUs. Simultaneously the performance was also improved.
 
 \begin{table}[h]
 	\centering
-	\label{table:final_results}
 	\begin{tabular}{ccccc}
 		& \multicolumn{2}{c}{\textbf{Performance}} & \multicolumn{2}{c}{\textbf{Time}} \\
 		\textbf{}                                                                          & good                & bad                & good            & bad             \\ \hline
@@ -317,12 +318,24 @@ During the implementation, we questioned the utility of \textit{product id} and 
 		\textbf{\begin{tabular}[c]{@{}c@{}}GRUs (without both\\ context features)\end{tabular}}   & 0.616               & 0.594              & 1h 16m          & 1h 20m         
 	\end{tabular}
 	\caption{Final results: test set performance and training time}
+	\label{table:finalresults}
 \end{table}
 
-The results of our mini project are summarized in Table~\ref{tab:results}. The most noticeable matter in this table is, that we reduced the training time significantly by changing the recurrent unit from LSTMs to GRUs. Simultaneously the performance was also improved.
+\begin{figure}[ht!]
+	\begin{center}
+		\subfigure[good dataset]{%
+			\includegraphics[width=0.5\textwidth]{../plots/good_run_50k_step_9850.png}
+		}%
+		\subfigure[bad dataset]{%
+			\includegraphics[width=0.5\textwidth]{../plots/bad_run_50k_step_8200.png}
+		}
+	\end{center}
+	\caption{Receiving operating characteristic (ROC) plots for the final model.}
+	\label{pic:finalresults}
+\end{figure}
 
 \subsection{LSTM vs GRU}
-Our main difference from the base line, after all the experimentation, is the switch from Long Short-Term Memory units to Gated Recurrent Units. The gain was evident performance and time-wise.
+Our main difference from the base line, after all the experimentation, is the switch from Long Short-Term Memory units to Gated Recurrent Units. The change resulted in both a performance boost and a computational time improvement.
 
 \subsection{Features relevance}
 As discussed in Subsection \ref{sec:main_model_framework} and \ref{subsec:features_relevance}, the context features did have influence in the model training. The reason is that deeper connections can be done knowing the source of the review.
